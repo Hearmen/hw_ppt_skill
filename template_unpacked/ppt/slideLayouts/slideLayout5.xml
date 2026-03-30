@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<p:sldLayout xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:p="http://schemas.openxmlformats.org/presentationml/2006/main" userDrawn="1">
+  <p:cSld name="1_Contents page">
+    <p:bg>
+      <p:bgPr>
+        <a:solidFill>
+          <a:srgbClr val="EBEBEB"/>
+        </a:solidFill>
+        <a:effectLst/>
+      </p:bgPr>
+    </p:bg>
+    <p:spTree>
+      <p:nvGrpSpPr>
+        <p:cNvPr id="1" name=""/>
+        <p:cNvGrpSpPr/>
+        <p:nvPr/>
+      </p:nvGrpSpPr>
+      <p:grpSpPr>
+        <a:xfrm>
+          <a:off x="0" y="0"/>
+          <a:ext cx="0" cy="0"/>
+          <a:chOff x="0" y="0"/>
+          <a:chExt cx="0" cy="0"/>
+        </a:xfrm>
+      </p:grpSpPr>
+      <p:sp>
+        <p:nvSpPr>
+          <p:cNvPr id="8" name="Text Placeholder 7"/>
+          <p:cNvSpPr>
+            <a:spLocks noGrp="1"/>
+          </p:cNvSpPr>
+          <p:nvPr>
+            <p:ph type="body" sz="quarter" idx="10" hasCustomPrompt="1"/>
+          </p:nvPr>
+        </p:nvSpPr>
+        <p:spPr>
+          <a:xfrm>
+            <a:off x="1033620" y="1843088"/>
+            <a:ext cx="10122060" cy="3013725"/>
+          </a:xfrm>
+          <a:prstGeom prst="rect">
+            <a:avLst/>
+          </a:prstGeom>
+        </p:spPr>
+        <p:txBody>
+          <a:bodyPr tIns="90000" bIns="90000"/>
+          <a:lstStyle>
+            <a:lvl1pPr marL="412750" indent="-398780">
+              <a:lnSpc>
+                <a:spcPct val="70000"/>
+              </a:lnSpc>
+              <a:buFont typeface="+mj-lt"/>
+              <a:buAutoNum type="arabicPeriod"/>
+              <a:defRPr sz="2200">
+                <a:solidFill>
+                  <a:schemeClr val="tx1"/>
+                </a:solidFill>
+                <a:latin typeface="微软雅黑" panose="020B0503020204020204" pitchFamily="34" charset="-122"/>
+                <a:ea typeface="微软雅黑" panose="020B0503020204020204" pitchFamily="34" charset="-122"/>
+              </a:defRPr>
+            </a:lvl1pPr>
+            <a:lvl2pPr marL="412750" indent="-398780">
+              <a:buFont typeface="+mj-lt"/>
+              <a:buAutoNum type="arabicPeriod"/>
+              <a:defRPr/>
+            </a:lvl2pPr>
+            <a:lvl3pPr marL="13970" indent="0">
+              <a:buFont typeface="+mj-lt"/>
+              <a:buNone/>
+              <a:defRPr sz="2200">
+                <a:latin typeface="微软雅黑" panose="020B0503020204020204" pitchFamily="34" charset="-122"/>
+                <a:ea typeface="微软雅黑" panose="020B0503020204020204" pitchFamily="34" charset="-122"/>
+              </a:defRPr>
+            </a:lvl3pPr>
+            <a:lvl4pPr marL="13970" indent="0">
+              <a:buFont typeface="+mj-lt"/>
+              <a:buNone/>
+              <a:defRPr sz="2200">
+                <a:latin typeface="微软雅黑" panose="020B0503020204020204" pitchFamily="34" charset="-122"/>
+                <a:ea typeface="微软雅黑" panose="020B0503020204020204" pitchFamily="34" charset="-122"/>
+              </a:defRPr>
+            </a:lvl4pPr>
+            <a:lvl5pPr marL="13970" indent="0">
+              <a:buFont typeface="+mj-lt"/>
+              <a:buNone/>
+              <a:defRPr sz="2200">
+                <a:latin typeface="微软雅黑" panose="020B0503020204020204" pitchFamily="34" charset="-122"/>
+                <a:ea typeface="微软雅黑" panose="020B0503020204020204" pitchFamily="34" charset="-122"/>
+              </a:defRPr>
+            </a:lvl5pPr>
+          </a:lstStyle>
+          <a:p>
+            <a:pPr lvl="0"/>
+            <a:r>
+              <a:rPr lang="zh-CN" altLang="en-US" dirty="0"/>
+              <a:t>单击此处添加文本</a:t>
+            </a:r>
+            <a:endParaRPr lang="en-US" altLang="zh-CN" dirty="0"/>
+          </a:p>
+        </p:txBody>
+      </p:sp>
+      <p:cxnSp>
+        <p:nvCxnSpPr>
+          <p:cNvPr id="3" name="直线连接符 14"/>
+          <p:cNvCxnSpPr/>
+          <p:nvPr userDrawn="1"/>
+        </p:nvCxnSpPr>
+        <p:spPr>
+          <a:xfrm flipH="1">
+            <a:off x="1029918" y="1349255"/>
+            <a:ext cx="885967" cy="0"/>
+          </a:xfrm>
+          <a:prstGeom prst="line">
+            <a:avLst/>
+          </a:prstGeom>
+          <a:ln w="28575">
+            <a:solidFill>
+              <a:srgbClr val="C7000B"/>
+            </a:solidFill>
+          </a:ln>
+          <a:effectLst/>
+        </p:spPr>
+        <p:style>
+          <a:lnRef idx="2">
+            <a:schemeClr val="accent1"/>
+          </a:lnRef>
+          <a:fillRef idx="0">
+            <a:schemeClr val="accent1"/>
+          </a:fillRef>
+          <a:effectRef idx="1">
+            <a:schemeClr val="accent1"/>
+          </a:effectRef>
+          <a:fontRef idx="minor">
+            <a:schemeClr val="tx1"/>
+          </a:fontRef>
+        </p:style>
+      </p:cxnSp>
+      <p:sp>
+        <p:nvSpPr>
+          <p:cNvPr id="4" name="文本框 16"/>
+          <p:cNvSpPr txBox="1"/>
+          <p:nvPr userDrawn="1"/>
+        </p:nvSpPr>
+        <p:spPr>
+          <a:xfrm>
+            <a:off x="918916" y="630373"/>
+            <a:ext cx="1147485" cy="653509"/>
+          </a:xfrm>
+          <a:prstGeom prst="rect">
+            <a:avLst/>
+          </a:prstGeom>
+          <a:noFill/>
+        </p:spPr>
+        <p:txBody>
+          <a:bodyPr wrap="none" rtlCol="0">
+            <a:spAutoFit/>
+          </a:bodyPr>
+          <a:lstStyle/>
+          <a:p>
+            <a:r>
+              <a:rPr kumimoji="1" lang="zh-CN" altLang="en-US" sz="3635" dirty="0">
+                <a:solidFill>
+                  <a:schemeClr val="tx1"/>
+                </a:solidFill>
+                <a:latin typeface="微软雅黑" panose="020B0503020204020204" pitchFamily="34" charset="-122"/>
+                <a:ea typeface="微软雅黑" panose="020B0503020204020204" pitchFamily="34" charset="-122"/>
+                <a:cs typeface="微软雅黑" panose="020B0503020204020204" pitchFamily="34" charset="-122"/>
+              </a:rPr>
+              <a:t>目录</a:t>
+            </a:r>
+            <a:endParaRPr kumimoji="1" lang="zh-CN" altLang="en-US" sz="3635" dirty="0">
+              <a:solidFill>
+                <a:schemeClr val="tx1"/>
+              </a:solidFill>
+              <a:latin typeface="微软雅黑" panose="020B0503020204020204" pitchFamily="34" charset="-122"/>
+              <a:ea typeface="微软雅黑" panose="020B0503020204020204" pitchFamily="34" charset="-122"/>
+              <a:cs typeface="微软雅黑" panose="020B0503020204020204" pitchFamily="34" charset="-122"/>
+            </a:endParaRPr>
+          </a:p>
+        </p:txBody>
+      </p:sp>
+    </p:spTree>
+  </p:cSld>
+  <p:clrMapOvr>
+    <a:masterClrMapping/>
+  </p:clrMapOvr>
+</p:sldLayout>

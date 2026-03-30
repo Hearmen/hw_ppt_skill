@@ -1,0 +1,278 @@
+{
+  "meta": {
+    "source": "template.pptx — Huawei AI Security presentation",
+    "extracted": "2025",
+    "total_elements": 45
+  },
+
+  "design_tokens": {
+    "colors": {
+      "primary":        "#C00000",
+      "primary_dark":   "#A82020",
+      "secondary":      "#44546A",
+      "accent_blue":    "#1F4E79",
+      "info_blue":      "#0070C0",
+      "mid_blue":       "#5B9BD5",
+      "light_blue":     "#BDD7EE",
+      "xlight_blue":    "#DEEBF7",
+      "ultra_blue":     "#E5F6FF",
+      "orange":         "#ED7D31",
+      "purple":         "#805AB4",
+      "light_purple":   "#F3EDFB",
+      "gray_blue":      "#E2E6ED",
+      "gray_mid":       "#AEB5C0",
+      "cream":          "#F9F2DA",
+      "cream_border":   "#DED0A4",
+      "text_dark":      "#1F1F1F",
+      "text_body":      "#2B2B2B",
+      "white":          "#FFFFFF"
+    },
+    "fonts": {
+      "chinese":  "微软雅黑",
+      "fallback": "Microsoft YaHei",
+      "english":  "Arial"
+    },
+    "font_scale": {
+      "cover_title":  0.078,
+      "page_title":   0.060,
+      "section_head": 0.038,
+      "body":         0.028,
+      "caption":      0.020,
+      "stat_number":  0.115,
+      "stat_label":   0.022
+    },
+    "spacing": {
+      "margin_inches":  0.42,
+      "gap_inches":     0.20,
+      "header_h":       0.55,
+      "footer_h":       0.28
+    }
+  },
+
+  "layouts": {
+    "extracted": [
+      {
+        "id": "SPLIT_LEFT",
+        "name": "左分类 + 右双区块",
+        "source_slide": 1,
+        "description": "左侧白色区域放分类列表（带红色小标题条），右侧上下各一个大区块（各含红色标题条+内容）",
+        "best_for": ["分类说明","多维度分析","左文右重点"],
+        "structure": {
+          "left":  { "x": 0.04, "y": 0.22, "w": 1.48, "h": 5.40, "bg": "white", "has_category_labels": true },
+          "right_top": { "x": 1.56, "y": 0.32, "w": 6.0, "h": 2.70, "header_bg": "primary", "content_bg": "white" },
+          "right_bottom": { "x": 1.56, "y": 3.10, "w": 6.0, "h": 2.60, "header_bg": "primary", "content_bg": "white" }
+        }
+      },
+      {
+        "id": "THREE_COL",
+        "name": "三栏对等 + 摘要条",
+        "source_slide": 2,
+        "description": "顶部宽摘要条（米黄），下方三列等宽，每列灰色标题栏+白色内容，可嵌入子图表",
+        "best_for": ["三维度对比","分类展示","并列说明"],
+        "structure": {
+          "summary_bar": { "y": 0.22, "h": 0.30, "bg": "cream" },
+          "col1": { "x": 0.04, "w": 3.18, "header_bg": "gray_blue", "content_bg": "white" },
+          "col2": { "x": 3.28, "w": 3.18, "header_bg": "gray_blue", "content_bg": "white" },
+          "col3": { "x": 6.52, "w": 3.18, "header_bg": "gray_blue", "content_bg": "white" }
+        }
+      },
+      {
+        "id": "STACKED_SECTIONS",
+        "name": "横向分节堆叠",
+        "source_slide": 5,
+        "description": "多个横向红色标题条依次堆叠，每条下方有内容区。最后一节支持子卡片行（紫色圆角卡片）",
+        "best_for": ["引用/参考文献","条款/规则列举","多节点内容"],
+        "structure": {
+          "summary_bar": { "h": 0.28, "bg": "cream" },
+          "section": { "header_h": 0.28, "header_bg": "primary", "content_bg": "white" },
+          "sub_cards": { "bg": "light_purple", "border": "purple", "radius": 4 }
+        }
+      },
+      {
+        "id": "QUAD_PANELS",
+        "name": "四象限面板",
+        "source_slide": 4,
+        "description": "2×2布局，每格含红色标题条+内容区，左下面板可嵌流程图，右侧可有大面板跨行",
+        "best_for": ["多案例展示","技术方案对比","场景分类"],
+        "structure": {
+          "top_left":    { "x": 0.04, "y": 0.64, "w": 4.70, "h": 2.82 },
+          "top_right":   { "x": 4.80, "y": 0.32, "w": 4.88, "h": 2.28 },
+          "bottom_left": { "x": 0.04, "y": 3.54, "w": 4.70, "h": 2.00 },
+          "bottom_right":{ "x": 4.80, "y": 3.54, "w": 4.88, "h": 2.00 }
+        }
+      },
+      {
+        "id": "ARCH_LAYERED",
+        "name": "三层架构图",
+        "source_slide": 3,
+        "description": "左侧编号列表，右侧三层架构图：应用层 → 平台层 → 基础设施层，层间红色上箭头",
+        "best_for": ["系统架构","技术栈","服务层级"],
+        "colors": {
+          "app_layer": "xlight_blue",
+          "platform_layer": "secondary",
+          "infra_layer": "gray_blue",
+          "arrow": "primary"
+        }
+      }
+    ],
+    "generated": [
+      {
+        "id": "COMPARISON",
+        "name": "红蓝双栏对比",
+        "description": "左红右蓝，各自独立标题条，内容对齐展示优劣势",
+        "best_for": ["方案对比","Before/After","优劣势分析"]
+      },
+      {
+        "id": "STAT_HERO",
+        "name": "数字亮点 + 详情",
+        "description": "顶部N个大数字卡片，下方两列详情说明区",
+        "best_for": ["KPI展示","报告摘要","数据汇总"]
+      },
+      {
+        "id": "ICON_ROW",
+        "name": "图标横排",
+        "description": "4-6个等宽卡片横排，每卡有彩色顶条+图标+标题+说明",
+        "best_for": ["特性列举","产品优势","能力清单"]
+      },
+      {
+        "id": "PYRAMID",
+        "name": "金字塔层级",
+        "description": "从上到下宽度递增的层级块，每层不同颜色，右侧注释",
+        "best_for": ["层级关系","优先级","需求分层"]
+      }
+    ]
+  },
+
+  "diagrams": {
+    "extracted": [
+      {
+        "id": "AGENT_MULTI_MODEL",
+        "name": "Agent 多模型连接图",
+        "description": "多个Agent椭圆通过橙色箭头连接到多个Model方形节点，N:M拓扑",
+        "colors": { "agent": "E2E6ED", "model": "BDD7EE", "arrow": "ED7D31" }
+      },
+      {
+        "id": "THREE_LAYER_ARCH",
+        "name": "三层架构堆叠图",
+        "description": "上层浅蓝（应用层）→中层深蓝灰（平台层）→下层灰（基础设施层），层间红色上箭头"
+      },
+      {
+        "id": "ICEBERG_TOKEN",
+        "name": "冰山 Token 可见度图",
+        "description": "水平线分隔可见区（浅蓝三角）和不可见区（深蓝三角），标注~500和~100K"
+      },
+      {
+        "id": "GUARDRAIL_FLOW",
+        "name": "护栏决策流程图",
+        "description": "用户输入→规则判断→LLM判断→正常/拦截分支，红色虚线框标注关键判断节点"
+      }
+    ],
+    "generated": [
+      {
+        "id": "FUNNEL_CHART",
+        "name": "漏斗转化分析图",
+        "description": "5层从上到下收窄的漏斗，颜色从红到浅，左标签右数值，适合转化率/筛选流程"
+      },
+      {
+        "id": "QUAD_MATRIX",
+        "name": "四象限优先级矩阵",
+        "description": "X轴影响力+Y轴可行性，四象限分色，圆形节点大小表示重要性"
+      },
+      {
+        "id": "CIRCULAR_LOOP",
+        "name": "循环闭环图",
+        "description": "4-6个节点形成环形，箭头顺时针，用于PDCA/反馈循环/持续改进"
+      },
+      {
+        "id": "TREE_BREAKDOWN",
+        "name": "树状分解图",
+        "description": "根节点向下展开分支，支持3层，用于问题拆解/目标分解/组织架构"
+      },
+      {
+        "id": "SWIM_LANE",
+        "name": "泳道流程图",
+        "description": "3-4条泳道水平分布，每条有角色标签，流程节点跨泳道连接"
+      },
+      {
+        "id": "NETWORK_TOPOLOGY",
+        "name": "网络拓扑图",
+        "description": "中心Hub节点+外围Spoke节点，双向箭头，节点图标可区分类型"
+      }
+    ]
+  },
+
+  "charts": {
+    "extracted": [
+      {
+        "id": "TABLE_COMPARISON",
+        "name": "维度对比表格",
+        "description": "深蓝灰表头+交替蓝白行，左列红色粗体，支持合并单元格",
+        "pptxgenjs_config": {
+          "header_fill": "44546A",
+          "header_color": "FFFFFF",
+          "row_odd": "FFFFFF",
+          "row_even": "DEEBF7",
+          "left_col_color": "C00000",
+          "border": { "pt": 0.5, "color": "E2E6ED" }
+        }
+      },
+      {
+        "id": "THREE_COL_CARDS",
+        "name": "三列分类卡片图",
+        "description": "三列等宽卡片，每列灰色标题+内嵌子区块（可混搭蓝/黄/紫子卡）"
+      }
+    ],
+    "generated": [
+      {
+        "id": "BAR_HORIZONTAL",
+        "name": "横向柱状对比图",
+        "description": "水平条形图，红/蓝双色系，白色背景，显示数据标签，适合4-6类别",
+        "pptxgenjs": { "type": "bar", "barDir": "bar" }
+      },
+      {
+        "id": "DONUT_PIE",
+        "name": "甜甜圈占比图",
+        "description": "圆环图，中心显示总量，外圈4段分色，右侧图例，使用红蓝橙紫配色",
+        "pptxgenjs": { "type": "doughnut" }
+      },
+      {
+        "id": "RADAR_CAPABILITY",
+        "name": "六维能力雷达图",
+        "description": "6维蜘蛛网，红色填充=当前，蓝色虚线=目标，背景灰网格",
+        "pptxgenjs": { "type": "radar" }
+      },
+      {
+        "id": "LINE_TREND",
+        "name": "折线趋势图",
+        "description": "1-2条折线，平滑曲线，节点标注，区域淡色填充，用于增长趋势",
+        "pptxgenjs": { "type": "line", "lineSmooth": true }
+      },
+      {
+        "id": "BUBBLE_CHART",
+        "name": "气泡优先级图",
+        "description": "X轴+Y轴坐标+气泡大小三维，颜色区分类别，用于多维度评估",
+        "pptxgenjs": { "type": "bubble" }
+      },
+      {
+        "id": "STACKED_BAR",
+        "name": "堆叠柱状图",
+        "description": "每柱堆叠多段颜色，显示构成比例，适合5类以内各组成分析",
+        "pptxgenjs": { "type": "bar", "barGrouping": "stacked" }
+      }
+    ]
+  },
+
+  "usage_guide": {
+    "selection_rules": [
+      { "content_signal": "有数字/KPI",        "recommend": ["STAT_HERO","STATS_ROW","BAR_HORIZONTAL","DONUT_PIE"] },
+      { "content_signal": "有流程/步骤",        "recommend": ["FLOW","TIMELINE","SWIM_LANE","GUARDRAIL_FLOW"] },
+      { "content_signal": "有层级/架构",        "recommend": ["THREE_LAYER_ARCH","ARCH_LAYERED","TREE_BREAKDOWN"] },
+      { "content_signal": "有对比/优劣",        "recommend": ["COMPARISON","TABLE_COMPARISON","RADAR_CAPABILITY"] },
+      { "content_signal": "有分类/特性列举",    "recommend": ["ICON_GRID","ICON_ROW","TAG_CLOUD","THREE_COL"] },
+      { "content_signal": "是核心结论/引言",    "recommend": ["QUOTE_PANEL","DARK_QUOTE_BLOCK","HERO_SPLIT"] },
+      { "content_signal": "有网络/依赖关系",    "recommend": ["AGENT_MULTI_MODEL","NETWORK_TOPOLOGY","CIRCULAR_LOOP"] },
+      { "content_signal": "有风险/警告内容",    "recommend": ["RISK_WARNING_BLOCK","QUAD_PANELS","GUARDRAIL_FLOW"] },
+      { "content_signal": "有复杂混合内容",     "recommend": ["QUAD_PANELS","SPLIT_LEFT","MIXED"] }
+    ]
+  }
+}
