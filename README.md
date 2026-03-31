@@ -21,7 +21,6 @@ hw_ppt_skill/
 ├── LICENSE.txt               # 许可证信息
 ├── template/                 # 华为风格 PPT 模板
 │   └── hw_template.pptx      # 包含 4 页示例幻灯片的模板
-├── template_unpacked/        # 解压后的模板文件（用于编辑）
 ├── layout/                   # 布局资源库
 │   └── materials_library.json # 设计令牌、布局、图表配置
 └── scripts/                  # 实用脚本工具
@@ -35,6 +34,8 @@ hw_ppt_skill/
     ├── thumbnail.py          # 生成缩略图网格
     └── extract_layout_contract.py # 提取布局契约
 ```
+
+`template_unpacked/` 和 `unpacked/` 属于本地解包产物，按需通过 `unpack.py` 生成，不再作为仓库内常驻文件维护。
 
 ## 快速开始
 

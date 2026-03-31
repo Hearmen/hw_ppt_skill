@@ -2,15 +2,173 @@
 
 ---
 
-**模板结构说明**：`template/hw_template.pptx` 包含 4 页示例幻灯片，直接在模版上进行修改：
-- **slide1**：标题页（使用 slideMaster2）
-- **slide2**：目录页（使用 slideMaster1）
-- **slide3**：内容页（使用 slideMaster3）
-- **slide4**：结束页（使用 slideMaster4）
+## Hybrid Workflow: Template Shell + Free Content Area
+
+使用 `template/hw_template.pptx` 作为模版进行修改
+
+### Template-Based Workflow
+
+When using an existing presentation as a template:
+
+1. **Analyze existing slides**:
+   ```bash
+   python scripts/thumbnail.py template.pptx
+   python -m markitdown template.pptx
+   ```
+   Review `thumbnails.jpg` to see layouts, and markitdown output to see placeholder text.
+
+2. **Plan slide mapping**: For each content section, choose a template slide.
+
+   ⚠️ **USE VARIED LAYOUTS** — monotonous presentations are a common failure mode. Don't default to basic title + bullet slides. Actively seek out:
+   - Multi-column layouts (2-column, 3-column)
+   - Image + text combinations
+   - Full-bleed images with text overlay
+   - Quote or callout slides
+   - Section dividers
+   - Stat/number callouts
+   - Icon grids or icon + text rows
+
+   **Avoid:** Repeating the same text-heavy layout for every slide.
+
+   Match content type to layout style (e.g., key points → bullet slide, team info → multi-column, testimonials → quote slide).
+
+3. **Unpack**: `python scripts/office/unpack.py template.pptx unpacked/`
+
+4. **Build presentation** (do this yourself, not with subagents):
+   - Delete unwanted slides (remove from `<p:sldIdLst>`)
+   - Duplicate slides you want to reuse (`add_slide.py`)
+   - Reorder slides in `<p:sldIdLst>`
+   - **Complete all structural changes before step 5**
+
+5. **Edit content**: Update text in each `slide{N}.xml`.
+   **Use subagents here if available** — slides are separate XML files, so subagents can edit in parallel.
+
+6. **Clean**: `python scripts/clean.py unpacked/`
+
+7. **Pack**: `python scripts/office/pack.py unpacked/ output.pptx --original template.pptx`
+
+
+the template provides the fixed shell, but it does **not** own the content layout.
+
+Recommended flow:
+
+1. Keep template slides for cover / TOC / ending.
+2. Duplicate the template's normal content slide as a shell.
+3. Lock header/footer/theme elements from that shell.
+4. Treat the central content area as an editable canvas.
+5. Generate text blocks, cards, diagrams, and tables only inside that content area.
+6. If content does not fit, add another content slide instead of shrinking the entire page.
+
+Practical rule:
+
+- **Template controls frame; generator controls body.**
+- Do not force generated content to mimic incidental placeholder positions from the template.
+- Lock header/footer regions first, then compose the content area using your own layout rules.
+
+Suggested inputs for the model:
+
+- template file path
+- which slides are fixed: cover / TOC / ending
+- locked regions on normal slides: header / footer
+- content area bounds
+- overflow policy: split slide before shrinking body text
+- optional layout preference: architecture / comparison / timeline / 2-column / cards
 
 ---
 
-## 一、尺寸与布局
+## Scripts
+
+| Script | Purpose |
+|--------|---------|
+| `unpack.py` | Extract and pretty-print PPTX |
+| `add_slide.py` | Duplicate slide or create from layout |
+| `clean.py` | Remove orphaned files |
+| `pack.py` | Repack with validation |
+| `thumbnail.py` | Create visual grid of slides |
+
+### unpack.py
+
+```bash
+python scripts/office/unpack.py input.pptx unpacked/
+```
+
+Extracts PPTX, pretty-prints XML, escapes smart quotes.
+
+### add_slide.py
+
+```bash
+python scripts/add_slide.py unpacked/ slide2.xml      # Duplicate slide
+python scripts/add_slide.py unpacked/ slideLayout2.xml # From layout
+```
+
+Prints `<p:sldId>` to add to `<p:sldIdLst>` at desired position.
+
+### clean.py
+
+```bash
+python scripts/clean.py unpacked/
+```
+
+Removes slides not in `<p:sldIdLst>`, unreferenced media, orphaned rels.
+
+### pack.py
+
+```bash
+python scripts/office/pack.py unpacked/ output.pptx --original input.pptx
+```
+
+Validates, repairs, condenses XML, re-encodes smart quotes.
+
+### thumbnail.py
+
+```bash
+python scripts/thumbnail.py input.pptx [output_prefix] [--cols N]
+```
+
+Creates `thumbnails.jpg` with slide filenames as labels. Default 3 columns, max 12 per grid.
+
+**Use for template analysis only** (choosing layouts). For visual QA, use `soffice` + `pdftoppm` to create full-resolution individual slide images—see SKILL.md.
+
+---
+
+## Slide Operations
+
+Slide order is in `ppt/presentation.xml` → `<p:sldIdLst>`.
+
+**Reorder**: Rearrange `<p:sldId>` elements.
+
+**Delete**: Remove `<p:sldId>`, then run `clean.py`.
+
+**Add**: Use `add_slide.py`. Never manually copy slide files—the script handles notes references, Content_Types.xml, and relationship IDs that manual copying misses.
+
+---
+
+## Editing Content
+
+**Subagents:** If available, use them here (after completing step 4). Each slide is a separate XML file, so subagents can edit in parallel. In your prompt to subagents, include:
+- The slide file path(s) to edit
+- **"Use the Edit tool for all changes"**
+- The formatting rules and common pitfalls below
+
+For each slide:
+1. Read the slide's XML
+2. Identify ALL placeholder content—text, images, charts, icons, captions
+3. Replace each placeholder with final content
+
+**Use the Edit tool, not sed or Python scripts.** The Edit tool forces specificity about what to replace and where, yielding better reliability.
+
+### Formatting Rules
+
+- **Bold all headers, and inline labels**: Use `b="1"` on `<a:rPr>`. This includes:
+  - Slide titles
+  - Section headers within a slide
+  - Inline labels like (e.g.: "Status:", "Description:") at the start of a line
+- **Never use unicode bullets (•)**: Use proper list formatting with `<a:buChar>` or `<a:buAutoNum>`
+- **Bullet consistency**: Let bullets inherit from the layout. Only specify `<a:buChar>` or `<a:buNone>`.
+
+---
+
+#### 一、尺寸与布局
 
 | 属性 | 值 |
 |------|-----|
@@ -24,15 +182,15 @@
 
 ---
 
-## 二、配色方案
+#### 二、配色方案
 
-### 主色调
+##### 主色调
 
 | 用途 | 颜色代码 | 说明 |
 |------|---------|------|
 | **主强调色（红）** | `C8102E` | 标题文字、边框、关键词高亮 |
 | **主强调色（亮红）** | `E9002F` | 品牌标记、图标强调 |
-| **深红链接色** | `C7000B` | 超链接 |
+| **深红链接色** | `C8102E` | 超链接 |
 | **正文黑** | `000000` / `1D1D1B` | 正文文字 |
 | **次级蓝灰** | `44546A` | 次要标签、说明文字 |
 | **浅蓝背景** | `DEEBF7` | 信息框背景 |
@@ -40,35 +198,32 @@
 | **线条灰** | `AEB5C0` | 分隔线、次要图形 |
 | **浅灰背景** | `E2E6ED` / `F1F1F2` | 卡片/区块背景 |
 | **白色** | `FFFFFF` | 反色文字、浅色背景区块 |
-| **页脚背景** | `F0F0F0` | 页脚区域浅灰背景 |
 
-### 配色原则
+##### 配色原则
 
 - **白色背景为主**：正文幻灯片背景为纯白（`FFFFFF`）
 - **红色（`C8102E`）主导**：用于顶部标题、关键词、小标题左侧 accent 条
 - **黑色正文**：所有正文文字使用黑色 `000000`，次要说明使用 `44546A`
-- **黑色边框**：所有边框使用黑色`000000`
 - **禁止使用渐变**：所有填充均为纯色
 
 ---
 
-## 三、排版规范
+#### 三、排版规范
 
-### 字体
+##### 字体
 
 | 元素 | 字体 | 中文字体 | 尺寸 | 样式 |
 |------|------|---------|------|------|
 | 标题页主标题 | Arial / 微软雅黑 | 微软雅黑 | 57pt（5700/100） | 常规，白色或黑色 |
 | 幻灯片主标题 | 微软雅黑 | 微软雅黑 | 32pt（3200/100） | 粗体，红色 `C8102E` |
-| 副标题/摘要 | 微软雅黑 | 微软雅黑 | 14pt（1400/100） | 粗体，`44546A` 或黑色 |
+| 副标题/摘要 | 微软雅黑 | 微软雅黑 | 14pt（1400/100） | 粗体，黑色 |
 | 区块小标题 | 微软雅黑 | 微软雅黑 | 14pt | 粗体， 黑色 或者 红底白字 |
 | 正文内容 | 微软雅黑 | 微软雅黑 | **14pt** | 常规，黑色 |
-| 页脚文字 | Arial | 微软雅黑 | 10pt | 常规，`1D1D1B` 黑色 |
 | 结束页标语 | 微软雅黑 | 微软雅黑 | 13pt | 常规，`1D1D1B` 黑色 |
 
 > **注意**：该演示文稿使用 `微软雅黑` 字体作为中文主要字体，`Arial` 作为英文辅助字体。生成中文演示文稿时，`fontFace` 应始终设为 `"微软雅黑"`。
 
-### 标题栏结构（每张正文幻灯片）
+##### 标题栏结构（每张正文幻灯片）
 
 每张幻灯片顶部有两个固定元素：
 
@@ -77,9 +232,9 @@
 ```javascript
 // 主标题文字（红色，粗体）
 slide.addText("幻灯片主标题", {
-  x: 0.15, y: 0.07, w: 13.03, h: 0.62,
+  x: 0.15, y: 0.08, w: 13.03, h: 1.15,
   fontSize: 32, bold: true, color: "C8102E",
-  fontFace: "微软雅黑", valign: "middle", margin: 0
+  fontFace: "微软雅黑", valign: "middle", margin: 0.06
 });
 ```
 
@@ -89,9 +244,9 @@ slide.addText("幻灯片主标题", {
 // 副标题背景框（奶油色 + 细边框）
 slide.addShape(pres.shapes.RECTANGLE, {
   x: 0.15,           // 与主标题左对齐
-  y: 0.75,           // 主标题下方
+  y: 1.30,           // 主标题下方
   w: 13.03,          // 与主标题同宽
-  h: 0.55,           // 适配 14pt 文字
+  h: 0.52,           // 适配 14pt 文字
   fill: { color: "F9F2DA" },        // 奶油色背景
   line: { color: "E8DCC0", width: 0.5 }  // 细边框
 });
@@ -99,19 +254,18 @@ slide.addShape(pres.shapes.RECTANGLE, {
 // 副标题文字
 slide.addText("一句话总结本页核心观点", {
   x: 0.25,           // 框左侧 + 0.1" 内边距
-  y: 0.75,           // 与框对齐
+  y: 1.30,           // 与框对齐
   w: 12.83,          // 框宽 - 0.2" 左右内边距
-  h: 0.55,           // 与框同高
+  h: 0.52,           // 与框同高
   fontSize: 14,      // 14pt
-  bold: true,
-  color: "44546A",   // 蓝灰色
+  color: "000000",   // 黑色
   fontFace: "微软雅黑",
   valign: "middle",
   margin: 0
 });
 ```
 
-### 内容区块小标题
+##### 内容区块小标题
 
 区块小标题使用 **黑色粗体** + 左侧细红色矩形 accent 条：
 ```javascript
@@ -131,7 +285,7 @@ slide.addText("区块名称", {
 ---
 
 
-## 四、内容卡片样式
+#### 四、内容卡片样式
 
 
 该风格广泛使用**信息卡片**来组织内容区块，每页都有多种信息卡片类型，每页至少有一个diagrame卡片。
@@ -165,6 +319,15 @@ slide.addText("文本框主题", {
   fill: { color: "C8102E" }  // 红色背景
 });
 
+/*
+//或者 
+slide.addText("文本框主题", {
+  x: 0.5, y: 1.0, w: 9.0, h: 0.6,
+  fontSize: 18, bold: true, color: "000000",  // 黑色文字
+  fontFace: "微软雅黑", valign: "middle"
+});
+*/
+
 // 白色内容区（带项目符号）
 slide.addText([
   { text: "文本内容" },
@@ -175,11 +338,11 @@ slide.addText([
   fontFace: "微软雅黑", valign: "top",
   bullet: true,  // 自动项目符号
   fill: { color: "FFFFFF" },           // 白色背景
-  line: { color: "DDDDDD", width: 0.5 } // 浅灰边框
+  line: { color: "F0F0F0", width: 0.5 } // 浅灰边框
 });
 ```
 
-### 卡片内常见布局
+##### 卡片内常见布局
 
 卡片布局参考 `layout/materials_library.json`
 - **左侧宽图 + 右侧文字列** (60/40 或 55/45 分割)
@@ -188,20 +351,45 @@ slide.addText([
 
 ---
 
-## 五、数据与表格
+#### 五、数据与表格
 
 表格样式：
+
 ```javascript
-slide.addTable(rows, {
-  x: tableX, y: tableY, w: tableW,
-  border: { pt: 0.5, color: "AEB5C0" },
-  colW: [...],  // 按内容比例分配
-  // 表头行
-  // rows[0] 每个单元格：{ text: "...", options: { fill: { color: "C8102E" }, color: "FFFFFF", bold: true, fontFace: "微软雅黑", fontSize: 12 } }
-  // 数据行交替背景
-  // 奇数行：fill { color: "FFFFFF" }，偶数行：fill { color: "F1F1F2" }
+slide.addChart(pres.charts.BAR, chartData, {
+  x: 0.5, y: 1, w: 9, h: 4, barDir: "col",
+
+  // Custom colors (match your presentation palette)
+  chartColors: ["0D9488", "14B8A6", "5EEAD4"],
+
+  // Clean background
+  chartArea: { fill: { color: "FFFFFF" }, roundedCorners: true },
+
+  // Muted axis labels
+  catAxisLabelColor: "64748B",
+  valAxisLabelColor: "64748B",
+
+  // Subtle grid (value axis only)
+  valGridLine: { color: "E2E8F0", size: 0.5 },
+  catGridLine: { style: "none" },
+
+  // Data labels on bars
+  showValue: true,
+  dataLabelPosition: "outEnd",
+  dataLabelColor: "1E293B",
+
+  // Hide legend for single series
+  showLegend: false,
 });
 ```
+
+**Key styling options:**
+- `chartColors: [...]` - hex colors for series/segments
+- `chartArea: { fill, border, roundedCorners }` - chart background
+- `catGridLine/valGridLine: { color, style, size }` - grid lines (`style: "none"` to hide)
+- `lineSmooth: true` - curved lines (line charts)
+- `legendPos: "r"` - legend position: "b", "t", "l", "r", "tr"
+
 
 ---
 
@@ -214,158 +402,7 @@ chartColors: ["C8102E", "5B9BD5", "ED7D31", "44546A", "70AD47"]
 // 主红 → 蓝 → 橙 → 蓝灰 → 绿
 ```
 
----
-
-## 七、基于模板的创建方式
-
-使用 `hw_template.pptx` 作为模板创建演示文稿的推荐工作流程：
-
-```bash
-# 1. 解压模板
-python scripts/office/unpack.py hw_template.pptx unpacked/
-
-# 2. 复制幻灯片（以 slide3 内容页为模板创建新幻灯片）
-python scripts/add_slide.py unpacked/ slide3.xml
-
-# 3. 编辑各 slide{N}.xml 中的内容
-
-# 4. 清理未引用的文件
-python scripts/clean.py unpacked/
-
-# 5. 打包生成最终 PPT
-python scripts/office/pack.py unpacked/ output.pptx --original hw_template.pptx
-```
-
-**模板幻灯片用途**：
-- **slide1**：标题页模板（slideMaster2）
-- **slide2**：目录页模板（slideMaster1）
-- **slide3**：内容页模板（slideMaster3）
-- **slide4**：结束页模板（slideMaster4）
-
-### 当模板只约束固定壳层时
-
-如果你的模板要求实际上只有这些固定部分：
-- 封面
-- 目录
-- 结束页
-- 正文页的页眉与页脚
-
-那么应采用 **混合模式**，而不是全文照搬模板布局。
-
-原则如下：
-
-1. **封面 / 目录 / 结束页**：直接基于模板页修改内容。
-2. **正文页**：复制 `slide3` 作为内容页壳层。
-3. **页眉页脚**：视为锁定区域，不移动、不删除。
-4. **正文内容区**：重新布局，卡片、结构图、对比区、时间线都可以在内容区自由生成。
-一句话：
-
-**模板负责“页框”，生成器负责“版心”。**
-
----
-
-## 八、完整幻灯片代码模板
-
-以下是符合 Huawei 风格的单张正文幻灯片完整代码框架：
-
-```javascript
-const pptxgen = require("pptxgenjs");
-const pres = new pptxgen();
-pres.layout = "LAYOUT_WIDE";  // 13.33" × 7.5"
-
-const slide = pres.addSlide();
-
-// ── 背景 ──────────────────────────────────────────
-slide.background = { color: "FFFFFF" };
-
-// ── 顶部主标题栏 ──────────────────────────────────
-slide.addText("幻灯片主标题", {
-  x: 0.15, y: 0.07, w: 13.03, h: 0.62,
-  fontSize: 32, bold: true, color: "C8102E",
-  fontFace: "微软雅黑", valign: "middle", margin: 8
-});
-
-// ── 副标题摘要行 ──────────────────────────────────
-// 副标题背景框（奶油色 + 细边框）
-slide.addShape(pres.shapes.RECTANGLE, {
-  x: 0.15,           // 与主标题左对齐
-  y: 0.75,           // 主标题下方
-  w: 13.03,          // 与主标题同宽
-  h: 0.55,           // 适配 14pt 文字
-  fill: { color: "F9F2DA" },        // 奶油色背景
-  line: { color: "E8DCC0", width: 0.5 }  // 细边框
-});
-
-// 副标题文字
-slide.addText("本页核心观点一句话摘要", {
-  x: 0.25,           // 框左侧 + 0.1" 内边距
-  y: 0.75,           // 与框对齐
-  w: 12.83,          // 框宽 - 0.2" 左右内边距
-  h: 0.55,           // 与框同高
-  fontSize: 14, bold: true, color: "44546A",
-  fontFace: "微软雅黑", valign: "middle", margin: 0
-});
-
-// ── 内容区（示例：两列布局）─────────────────────────
-const COL1_X = 0.15, COL1_W = 6.3;
-const COL2_X = 6.6,  COL2_W = 6.58;
-const CONTENT_Y = 1.76;
-
-// 左列小标题
-slide.addShape(pres.shapes.RECTANGLE, {
-  x: COL1_X, y: CONTENT_Y, w: 0.06, h: 0.27,
-  fill: { color: "C8102E" }, line: { color: "C8102E" }
-});
-slide.addText("左侧区块标题", {
-  x: COL1_X + 0.1, y: CONTENT_Y, w: COL1_W - 0.1, h: 0.27,
-  fontSize: 14, bold: true, color: "000000",
-  fontFace: "微软雅黑", valign: "middle", margin: 0
-});
-// 左列正文
-slide.addText([
-  { text: "核心定义：", options: { bold: true, color: "000000" } },
-  { text: "正文内容描述……", options: { bold: false, color: "000000" } }
-], {
-  x: COL1_X, y: CONTENT_Y + 0.35, w: COL1_W, h: 4.8,
-  fontSize: 14, fontFace: "微软雅黑", valign: "top",
-  color: "000000", margin: 4, wrap: true
-});
-
-// 分割线
-const LINE_X = COL1_X + COL1_W + 0.15;  // 左列右边缘 + 间距
-const LINE_Y_START = CONTENT_Y;          // 与标题同高
-const LINE_Y_END = CONTENT_Y + 5.2;      // 延伸至底部（比正文稍长）
-
-slide.addShape(pres.shapes.LINE, {
-  x: LINE_X, y: LINE_Y_START, w: 0, h: LINE_Y_END - LINE_Y_START,
-  line: { 
-    color: "000000",      // 黑色
-    width: 2.25,          // 粗线（2.25pt）
-    dashType: "dash"      // 虚线样式
-  }
-});
-
-// 右列小标题
-const COL2_X_NEW = LINE_X + 0.15;  // 虚线右侧 + 间距
-
-slide.addShape(pres.shapes.RECTANGLE, {
-  x: COL2_X_NEW, y: CONTENT_Y, w: 0.06, h: 0.27,
-  fill: { color: "C8102E" }, line: { color: "C8102E" }
-});
-slide.addText("右侧区块标题", {
-  x: COL2_X_NEW + 0.1, y: CONTENT_Y, w: COL2_W - 0.1, h: 0.27,
-  fontSize: 14, bold: true, color: "000000",
-  fontFace: "微软雅黑", valign: "middle", margin: 0
-});
-// 右列内容...
-
-
-pres.writeFile({ fileName: "output.pptx" });
-```
-
----
-
-## 十三、风格总结
+## 七、风格总结
 
 | 特征 | 规则 |
 |------|------|
@@ -377,19 +414,18 @@ pres.writeFile({ fileName: "output.pptx" });
 | 副标题 | 白底深蓝灰色粗体 |
 | 区块标题 | 红色左侧 accent 竖条 + 黑色粗体文字 |
 | 正文 | 黑色 `000000`，14pt，微软雅黑常规 |
-| 卡片边框 | 红色 `C8102E` 细边框（1pt）或无边框白底 |
-| 页脚 | 浅灰 `F0F0F0` 背景，`Security Level:` 文字 |
+| 卡片边框 | 浅灰色 `F0F0F0` 细边框（1pt）或无边框白底 |
 | 禁止 | 渐变、阴影装饰、蓝色标题 |
 
 ---
 
-## 十四、颜色常量参考
+## 八、颜色常量参考
 
 ```javascript
 const COLORS = {
   red: "C8102E",           // 主红色（Pantone 186C）
   brightRed: "E9002F",     // 亮红色
-  linkRed: "C7000B",       // 链接红色
+  linkRed: "C8102E",       // 链接红色
   black: "000000",         // 正文黑
   darkText: "1D1D1B",      // 深色文字
   blueGray: "44546A",      // 蓝灰色
@@ -397,18 +433,68 @@ const COLORS = {
   orange: "ED7D31",        // 橙色强调
   lineGray: "AEB5C0",      // 线条灰
   lightGray: "E2E6ED",     // 浅灰
-  bgGray: "F0F0F0",        // 页脚背景
   white: "FFFFFF"          // 白色
 };
 ```
 
 ---
 
-## 十五、常见错误与注意事项
+## 九、常见错误与注意事项
 
 1. **字号过小**：正文请勿小于 14pt，标题页主标题应使用 50pt+
 2. **颜色错误**：使用 `C8102E` 而非 `C00000` 作为主红色
-3. **页脚缺失**：每张正文幻灯片都应包含页脚
 4. **字体不一致**：中文请始终使用 "微软雅黑"，不要使用 "Microsoft YaHei"
 5. **渐变填充**：华为风格禁止使用任何渐变，使用纯色填充
 6. **占位符残留**：使用模板编辑时，确保清除所有 placeholder 文字
+7. **Multi-Item Content**
+
+If source has multiple items (numbered lists, multiple sections), create separate `<a:p>` elements for each — **never concatenate into one string**.
+
+**❌ WRONG** — all items in one paragraph:
+```xml
+<a:p>
+  <a:r><a:rPr .../><a:t>Step 1: Do the first thing. Step 2: Do the second thing.</a:t></a:r>
+</a:p>
+```
+
+**✅ CORRECT** — separate paragraphs with bold headers:
+```xml
+<a:p>
+  <a:pPr algn="l"><a:lnSpc><a:spcPts val="3919"/></a:lnSpc></a:pPr>
+  <a:r><a:rPr lang="en-US" sz="2799" b="1" .../><a:t>Step 1</a:t></a:r>
+</a:p>
+<a:p>
+  <a:pPr algn="l"><a:lnSpc><a:spcPts val="3919"/></a:lnSpc></a:pPr>
+  <a:r><a:rPr lang="en-US" sz="2799" .../><a:t>Do the first thing.</a:t></a:r>
+</a:p>
+<a:p>
+  <a:pPr algn="l"><a:lnSpc><a:spcPts val="3919"/></a:lnSpc></a:pPr>
+  <a:r><a:rPr lang="en-US" sz="2799" b="1" .../><a:t>Step 2</a:t></a:r>
+</a:p>
+<!-- continue pattern -->
+```
+
+Copy `<a:pPr>` from the original paragraph to preserve line spacing. Use `b="1"` on headers.
+
+### Smart Quotes
+
+Handled automatically by unpack/pack. But the Edit tool converts smart quotes to ASCII.
+
+**When adding new text with quotes, use XML entities:**
+
+```xml
+<a:t>the &#x201C;Agreement&#x201D;</a:t>
+```
+
+| Character | Name | Unicode | XML Entity |
+|-----------|------|---------|------------|
+| `“` | Left double quote | U+201C | `&#x201C;` |
+| `”` | Right double quote | U+201D | `&#x201D;` |
+| `‘` | Left single quote | U+2018 | `&#x2018;` |
+| `’` | Right single quote | U+2019 | `&#x2019;` |
+
+### Other
+
+- **Whitespace**: Use `xml:space="preserve"` on `<a:t>` with leading/trailing spaces
+- **XML parsing**: Use `defusedxml.minidom`, not `xml.etree.ElementTree` (corrupts namespaces)
+

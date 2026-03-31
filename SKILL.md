@@ -1,6 +1,6 @@
 ---
 name: pptx
-description: "Use this skill any time a .pptx file is involved in any way — as input, output, or both. This includes: creating slide decks, pitch decks, or presentations; reading, parsing, or extracting text from any .pptx file (even if the extracted content will be used elsewhere, like in an email or summary); editing, modifying, or updating existing presentations; combining or splitting slide files; working with templates, layouts, speaker notes, or comments. Trigger whenever the user mentions \"deck,\" \"slides,\" \"presentation,\" or references a .pptx filename, regardless of what they plan to do with the content afterward. If a .pptx file needs to be opened, created, or touched, use this skill. Also trigger when user asks for slides in \"Huawei style\", \"openclaw style\", \"华为风格 PPT\", or uploads openclaw_insight.pptx as a style reference — in these cases, read openclaw_style.md for the exact visual design rules."
+description: "Use this skill any time a .pptx file is involved in any way — as input, output, or both. This includes: creating slide decks, pitch decks, or presentations; reading, parsing, or extracting text from any .pptx file (even if the extracted content will be used elsewhere, like in an email or summary); editing, modifying, or updating existing presentations; combining or splitting slide files; working with templates, layouts, speaker notes, or comments. Trigger whenever the user mentions \"deck,\" \"slides,\" \"presentation,\" or references a .pptx filename, regardless of what they plan to do with the content afterward. If a .pptx file needs to be opened, created, or touched, use this skill. Also trigger when user asks for slides in \"Huawei style\", \"华为风格 PPT\","
 license: Proprietary. LICENSE.txt has complete terms
 ---
 
@@ -11,14 +11,7 @@ license: Proprietary. LICENSE.txt has complete terms
 | Task | Guide |
 |------|-------|
 | Read/analyze content | `python -m markitdown presentation.pptx` |
-| Edit or create from template | Read [editing.md](editing.md) |
-| Create from scratch | Read [pptxgenjs.md](pptxgenjs.md) |
-| **Create in Huawei style** | **Read [openclaw_style.md](openclaw_style.md) FIRST** |
-
-> **Huawei 风格**：当用户要求生成"符合 huawei 风格"、"华为风格"、"专业中文 PPT"，**必须先读取 [huawei_style.md](huawei_style.md)**，并严格遵循其中的配色、字体、布局规范。
->
-> 如果模板只约束**封面、目录、结束页，以及每页页眉/页脚**，默认使用 **template shell** 模式：
-> 复用模板固定壳层，内容区单独排版；不要把模板里的偶然占位框当成正文必须遵守的布局。
+| **Create** | **Read [huawei_style.md](huawei_style.md) FIRST** |
 
 ---
 
@@ -51,17 +44,7 @@ If the template only provides fixed page chrome, use the hybrid workflow in [edi
 
 ---
 
-## Creating from Scratch
-
-**Read [pptxgenjs.md](pptxgenjs.md) for full details.**
-
-Use when no template or reference presentation is available.
-
----
-
 ## Design Ideas
-
-> **If the user wants OpenClaw Insight style**, skip the generic design guidance below and instead follow **[openclaw_style.md](openclaw_style.md)** completely. That file defines the exact colors, fonts, layout, and components to use.
 
 **Don't create boring slides.** Plain bullets on a white background won't impress anyone. Consider ideas from this list for each slide.
 
@@ -71,23 +54,6 @@ Use when no template or reference presentation is available.
 - **Dominance over equality**: One color should dominate (60-70% visual weight), with 1-2 supporting tones and one sharp accent. Never give all colors equal weight.
 - **Dark/light contrast**: Dark backgrounds for title + conclusion slides, light for content ("sandwich" structure). Or commit to dark throughout for a premium feel.
 - **Commit to a visual motif**: Pick ONE distinctive element and repeat it — rounded image frames, icons in colored circles, thick single-side borders. Carry it across every slide.
-
-### Color Palettes
-
-Choose colors that match your topic — don't default to generic blue. Use these palettes as inspiration:
-
-| Theme | Primary | Secondary | Accent |
-|-------|---------|-----------|--------|
-| **Midnight Executive** | `1E2761` (navy) | `CADCFC` (ice blue) | `FFFFFF` (white) |
-| **Forest & Moss** | `2C5F2D` (forest) | `97BC62` (moss) | `F5F5F5` (cream) |
-| **Coral Energy** | `F96167` (coral) | `F9E795` (gold) | `2F3C7E` (navy) |
-| **Warm Terracotta** | `B85042` (terracotta) | `E7E8D1` (sand) | `A7BEAE` (sage) |
-| **Ocean Gradient** | `065A82` (deep blue) | `1C7293` (teal) | `21295C` (midnight) |
-| **Charcoal Minimal** | `36454F` (charcoal) | `F2F2F2` (off-white) | `212121` (black) |
-| **Teal Trust** | `028090` (teal) | `00A896` (seafoam) | `02C39A` (mint) |
-| **Berry & Cream** | `6D2E46` (berry) | `A26769` (dusty rose) | `ECE2D0` (cream) |
-| **Sage Calm** | `84B59F` (sage) | `69A297` (eucalyptus) | `50808E` (slate) |
-| **Cherry Bold** | `990011` (cherry) | `FCF6F5` (off-white) | `2F3C7E` (navy) |
 
 ### For Each Slide
 
@@ -108,27 +74,6 @@ Choose colors that match your topic — don't default to generic blue. Use these
 - Icons in small colored circles next to section headers
 - Italic accent text for key stats or taglines
 
-### Typography
-
-**Choose an interesting font pairing** — don't default to Arial. Pick a header font with personality and pair it with a clean body font.
-
-| Header Font | Body Font |
-|-------------|-----------|
-| Georgia | Calibri |
-| Arial Black | Arial |
-| Calibri | Calibri Light |
-| Cambria | Calibri |
-| Trebuchet MS | Calibri |
-| Impact | Arial |
-| Palatino | Garamond |
-| Consolas | Calibri |
-
-| Element | Size |
-|---------|------|
-| Slide title | 36-44pt bold |
-| Section header | 20-24pt bold |
-| Body text | 14-16pt |
-| Captions | 10-12pt muted |
 
 ### Spacing
 
@@ -216,22 +161,6 @@ Report ALL issues found, including minor ones.
 
 **Do not declare success until you've completed at least one fix-and-verify cycle.**
 
----
-
-## Converting to Images
-
-Convert presentations to individual slide images for visual inspection:
-
-```bash
-python scripts/office/soffice.py --headless --convert-to pdf output.pptx
-rm -f slide-*.jpg
-pdftoppm -jpeg -r 150 output.pdf slide
-ls -1 "$PWD"/slide-*.jpg
-```
-
-**Pass the absolute paths printed above directly to the view tool.** The `rm` clears stale images from prior runs. `pdftoppm` zero-pads based on page count: `slide-1.jpg` for decks under 10 pages, `slide-01.jpg` for 10-99, `slide-001.jpg` for 100+.
-
-**After fixes, rerun all four commands above** — the PDF must be regenerated from the edited `.pptx` before `pdftoppm` can reflect your changes.
 
 ---
 
@@ -240,5 +169,3 @@ ls -1 "$PWD"/slide-*.jpg
 - `pip install "markitdown[pptx]"` - text extraction
 - `pip install Pillow` - thumbnail grids
 - `npm install -g pptxgenjs` - creating from scratch
-- LibreOffice (`soffice`) - PDF conversion (auto-configured for sandboxed environments via `scripts/office/soffice.py`)
-- Poppler (`pdftoppm`) - PDF to images
