@@ -1,9 +1,5 @@
 .DS_Store
 __pycache__/
 *.py[cod]
-template_unpacked/
-unpacked/
-output.pptx
-output.pdf
-slide-*.jpg
-thumbnails*.jpg
+.understand-anything/
+
