@@ -23,8 +23,12 @@ import zipfile
 from pathlib import Path
 
 import defusedxml.minidom
-from office.soffice import get_soffice_env
 from PIL import Image, ImageDraw, ImageFont
+
+try:
+    from .office.soffice import get_soffice_env
+except ImportError:
+    from office.soffice import get_soffice_env
 
 THUMBNAIL_WIDTH = 300
 CONVERSION_DPI = 100

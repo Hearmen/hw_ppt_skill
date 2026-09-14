@@ -1,17 +1,10 @@
 ---
-name: pptx
+name: hw-style-pptx
 description: "Use this skill any time a .pptx file is involved in any way — as input, output, or both. This includes: creating slide decks, pitch decks, or presentations; reading, parsing, or extracting text from any .pptx file (even if the extracted content will be used elsewhere, like in an email or summary); editing, modifying, or updating existing presentations; combining or splitting slide files; working with templates, layouts, speaker notes, or comments. Trigger whenever the user mentions \"deck,\" \"slides,\" \"presentation,\" or references a .pptx filename, regardless of what they plan to do with the content afterward. If a .pptx file needs to be opened, created, or touched, use this skill. Also trigger when user asks for slides in \"Huawei style\", \"华为风格 PPT\","
 license: Proprietary. LICENSE.txt has complete terms
 ---
 
 # PPTX Skill
-
-## Quick Reference
-
-| Task | Guide |
-|------|-------|
-| Read/analyze content | `python -m markitdown presentation.pptx` |
-| **Create** | **Read [huawei_style.md](huawei_style.md) FIRST** |
 
 ---
 
@@ -32,12 +25,14 @@ python scripts/office/unpack.py presentation.pptx unpacked/
 
 ## Editing Workflow
 
-**Read [editing.md](editing.md) for full details.**
+**DEFAULT**
+
+**Read [huawei_style.md](huawei_style.md) for full details.**
 
 1. Analyze template with `thumbnail.py`
 2. Unpack → manipulate slides → edit content → clean → pack
 
-If the template only provides fixed page chrome, use the hybrid workflow in [editing.md](editing.md):
+If the template only provides fixed page chrome, use the hybrid workflow in [huawei_style.md](huawei_style.md):
 - template owns cover / TOC / ending / header / footer
 - generator owns content-area layout
 - split slides before shrinking text below the readability threshold
@@ -59,27 +54,6 @@ If the template only provides fixed page chrome, use the hybrid workflow in [edi
 
 **Every slide needs a visual element** — image, chart, icon, or shape. Text-only slides are forgettable.
 
-**Layout options:**
-- Two-column (text left, illustration on right)
-- Icon + text rows (icon in colored circle, bold header, description below)
-- 2x2 or 2x3 grid (image on one side, grid of content blocks on other)
-- Half-bleed image (full left or right side) with content overlay
-
-**Data display:**
-- Large stat callouts (big numbers 60-72pt with small labels below)
-- Comparison columns (before/after, pros/cons, side-by-side options)
-- Timeline or process flow (numbered steps, arrows)
-
-**Visual polish:**
-- Icons in small colored circles next to section headers
-- Italic accent text for key stats or taglines
-
-
-### Spacing
-
-- 0.5" minimum margins
-- 0.3-0.5" between content blocks
-- Leave breathing room—don't fill every inch
 
 ### Avoid (Common Mistakes)
 

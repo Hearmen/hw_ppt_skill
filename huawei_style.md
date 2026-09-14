@@ -2,10 +2,6 @@
 
 ---
 
-## Hybrid Workflow: Template Shell + Free Content Area
-
-使用 `template/hw_template.pptx` 作为模版进行修改
-
 ### Template-Based Workflow
 
 When using an existing presentation as a template:
@@ -46,6 +42,14 @@ When using an existing presentation as a template:
 6. **Clean**: `python scripts/clean.py unpacked/`
 
 7. **Pack**: `python scripts/office/pack.py unpacked/ output.pptx --original template.pptx`
+
+## Hybrid Workflow: Template Shell + Free Content Area
+
+Use this mode when the template only constrains:
+- cover slide
+- table of contents slide
+- ending slide
+- header/footer or other fixed chrome on every page
 
 
 the template provides the fixed shell, but it does **not** own the content layout.
@@ -158,13 +162,6 @@ For each slide:
 **Use the Edit tool, not sed or Python scripts.** The Edit tool forces specificity about what to replace and where, yielding better reliability.
 
 ### Formatting Rules
-
-- **Bold all headers, and inline labels**: Use `b="1"` on `<a:rPr>`. This includes:
-  - Slide titles
-  - Section headers within a slide
-  - Inline labels like (e.g.: "Status:", "Description:") at the start of a line
-- **Never use unicode bullets (•)**: Use proper list formatting with `<a:buChar>` or `<a:buAutoNum>`
-- **Bullet consistency**: Let bullets inherit from the layout. Only specify `<a:buChar>` or `<a:buNone>`.
 
 ---
 
@@ -288,7 +285,7 @@ slide.addText("区块名称", {
 #### 四、内容卡片样式
 
 
-该风格广泛使用**信息卡片**来组织内容区块，每页都有多种信息卡片类型，每页至少有一个diagrame卡片。
+该风格广泛使用**信息卡片**来组织内容区块，每页都有多种信息卡片类型，**每页至少有一个 diagram 卡片**
 卡片之间可以嵌套
 顶层布局之间使用黑色粗虚线分隔
 
@@ -314,7 +311,7 @@ slide.addShape(pres.shapes.RECTANGLE, {
 // 红色标题栏（带文字）
 slide.addText("文本框主题", {
   x: 0.5, y: 1.0, w: 9.0, h: 0.6,
-  fontSize: 18, bold: true, color: "FFFFFF",
+  fontSize: 18, bold: true, color: "FFFFFF", // 白色文字
   fontFace: "微软雅黑", valign: "middle",
   fill: { color: "C8102E" }  // 红色背景
 });
@@ -393,7 +390,7 @@ slide.addChart(pres.charts.BAR, chartData, {
 
 ---
 
-## 六、图表配色
+## 六、插图
 
 图表系列颜色遵循主色调：
 
@@ -401,6 +398,143 @@ slide.addChart(pres.charts.BAR, chartData, {
 chartColors: ["C8102E", "5B9BD5", "ED7D31", "44546A", "70AD47"]
 // 主红 → 蓝 → 橙 → 蓝灰 → 绿
 ```
+
+### Image Sources
+
+```javascript
+// From file path
+slide.addImage({ path: "images/chart.png", x: 1, y: 1, w: 5, h: 3 });
+
+// From URL
+slide.addImage({ path: "https://example.com/image.jpg", x: 1, y: 1, w: 5, h: 3 });
+
+// From base64 (faster, no file I/O)
+slide.addImage({ data: "image/png;base64,iVBORw0KGgo...", x: 1, y: 1, w: 5, h: 3 });
+```
+
+### Image Options
+
+```javascript
+slide.addImage({
+  path: "image.png",
+  x: 1, y: 1, w: 5, h: 3,
+  rotate: 45,              // 0-359 degrees
+  rounding: true,          // Circular crop
+  transparency: 50,        // 0-100
+  flipH: true,             // Horizontal flip
+  flipV: false,            // Vertical flip
+  altText: "Description",  // Accessibility
+  hyperlink: { url: "https://example.com" }
+});
+```
+
+### Image Sizing Modes
+
+```javascript
+// Contain - fit inside, preserve ratio
+{ sizing: { type: 'contain', w: 4, h: 3 } }
+
+// Cover - fill area, preserve ratio (may crop)
+{ sizing: { type: 'cover', w: 4, h: 3 } }
+
+// Crop - cut specific portion
+{ sizing: { type: 'crop', x: 0.5, y: 0.5, w: 2, h: 2 } }
+```
+
+### Calculate Dimensions (preserve aspect ratio)
+
+```javascript
+const origWidth = 1978, origHeight = 923, maxHeight = 3.0;
+const calcWidth = maxHeight * (origWidth / origHeight);
+const centerX = (10 - calcWidth) / 2;
+
+slide.addImage({ path: "image.png", x: centerX, y: 1.2, w: calcWidth, h: maxHeight });
+```
+
+### Supported Formats
+
+- **Standard**: PNG, JPG, GIF (animated GIFs work in Microsoft 365)
+- **SVG**: Works in modern PowerPoint/Microsoft 365
+
+
+## 八、表格
+
+```javascript
+slide.addTable([
+  ["Header 1", "Header 2"],
+  ["Cell 1", "Cell 2"]
+], {
+  x: 1, y: 1, w: 8, h: 2,
+  border: { pt: 1, color: "999999" }, fill: { color: "F1F1F1" }
+});
+
+// Advanced with merged cells
+let tableData = [
+  [{ text: "Header", options: { fill: { color: "6699CC" }, color: "FFFFFF", bold: true } }, "Cell"],
+  [{ text: "Merged", options: { colspan: 2 } }]
+];
+slide.addTable(tableData, { x: 1, y: 3.5, w: 8, colW: [4, 4] });
+```
+
+```javascript
+// Bar chart
+slide.addChart(pres.charts.BAR, [{
+  name: "Sales", labels: ["Q1", "Q2", "Q3", "Q4"], values: [4500, 5500, 6200, 7100]
+}], {
+  x: 0.5, y: 0.6, w: 6, h: 3, barDir: 'col',
+  showTitle: true, title: 'Quarterly Sales'
+});
+
+// Line chart
+slide.addChart(pres.charts.LINE, [{
+  name: "Temp", labels: ["Jan", "Feb", "Mar"], values: [32, 35, 42]
+}], { x: 0.5, y: 4, w: 6, h: 3, lineSize: 3, lineSmooth: true });
+
+// Pie chart
+slide.addChart(pres.charts.PIE, [{
+  name: "Share", labels: ["A", "B", "Other"], values: [35, 45, 20]
+}], { x: 7, y: 1, w: 5, h: 4, showPercent: true });
+```
+
+### Better-Looking Charts
+
+Default charts look dated. Apply these options for a modern, clean appearance:
+
+```javascript
+slide.addChart(pres.charts.BAR, chartData, {
+  x: 0.5, y: 1, w: 9, h: 4, barDir: "col",
+
+  // Custom colors (match your presentation palette)
+  chartColors: ["0D9488", "14B8A6", "5EEAD4"],
+
+  // Clean background
+  chartArea: { fill: { color: "FFFFFF" }, roundedCorners: true },
+
+  // Muted axis labels
+  catAxisLabelColor: "64748B",
+  valAxisLabelColor: "64748B",
+
+  // Subtle grid (value axis only)
+  valGridLine: { color: "E2E8F0", size: 0.5 },
+  catGridLine: { style: "none" },
+
+  // Data labels on bars
+  showValue: true,
+  dataLabelPosition: "outEnd",
+  dataLabelColor: "1E293B",
+
+  // Hide legend for single series
+  showLegend: false,
+});
+```
+
+**Key styling options:**
+- `chartColors: [...]` - hex colors for series/segments
+- `chartArea: { fill, border, roundedCorners }` - chart background
+- `catGridLine/valGridLine: { color, style, size }` - grid lines (`style: "none"` to hide)
+- `lineSmooth: true` - curved lines (line charts)
+- `legendPos: "r"` - legend position: "b", "t", "l", "r", "tr"
+
 
 ## 七、风格总结
 

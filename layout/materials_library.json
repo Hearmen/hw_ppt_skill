@@ -114,32 +114,6 @@
           "arrow": "primary"
         }
       }
-    ],
-    "generated": [
-      {
-        "id": "COMPARISON",
-        "name": "红蓝双栏对比",
-        "description": "左红右蓝，各自独立标题条，内容对齐展示优劣势",
-        "best_for": ["方案对比","Before/After","优劣势分析"]
-      },
-      {
-        "id": "STAT_HERO",
-        "name": "数字亮点 + 详情",
-        "description": "顶部N个大数字卡片，下方两列详情说明区",
-        "best_for": ["KPI展示","报告摘要","数据汇总"]
-      },
-      {
-        "id": "ICON_ROW",
-        "name": "图标横排",
-        "description": "4-6个等宽卡片横排，每卡有彩色顶条+图标+标题+说明",
-        "best_for": ["特性列举","产品优势","能力清单"]
-      },
-      {
-        "id": "PYRAMID",
-        "name": "金字塔层级",
-        "description": "从上到下宽度递增的层级块，每层不同颜色，右侧注释",
-        "best_for": ["层级关系","优先级","需求分层"]
-      }
     ]
   },
 
@@ -166,42 +140,10 @@
         "name": "护栏决策流程图",
         "description": "用户输入→规则判断→LLM判断→正常/拦截分支，红色虚线框标注关键判断节点"
       }
-    ],
-    "generated": [
-      {
-        "id": "FUNNEL_CHART",
-        "name": "漏斗转化分析图",
-        "description": "5层从上到下收窄的漏斗，颜色从红到浅，左标签右数值，适合转化率/筛选流程"
-      },
-      {
-        "id": "QUAD_MATRIX",
-        "name": "四象限优先级矩阵",
-        "description": "X轴影响力+Y轴可行性，四象限分色，圆形节点大小表示重要性"
-      },
-      {
-        "id": "CIRCULAR_LOOP",
-        "name": "循环闭环图",
-        "description": "4-6个节点形成环形，箭头顺时针，用于PDCA/反馈循环/持续改进"
-      },
-      {
-        "id": "TREE_BREAKDOWN",
-        "name": "树状分解图",
-        "description": "根节点向下展开分支，支持3层，用于问题拆解/目标分解/组织架构"
-      },
-      {
-        "id": "SWIM_LANE",
-        "name": "泳道流程图",
-        "description": "3-4条泳道水平分布，每条有角色标签，流程节点跨泳道连接"
-      },
-      {
-        "id": "NETWORK_TOPOLOGY",
-        "name": "网络拓扑图",
-        "description": "中心Hub节点+外围Spoke节点，双向箭头，节点图标可区分类型"
-      }
     ]
   },
 
-  "charts": {
+  "ch/arts": {
     "extracted": [
       {
         "id": "TABLE_COMPARISON",
